@@ -195,6 +195,8 @@ void HDevice::ConvertAudioSettings()
 	audioConfig.sampleRate = wfex->nSamplesPerSec;
 	audioConfig.channels = wfex->nChannels;
 
+	Debug(L"\tsampleRate = %d", audioConfig.sampleRate);
+
 	if (wfex->wFormatTag == WAVE_FORMAT_RAW_AAC1)
 		audioConfig.format = AudioFormat::AAC;
 	else if (wfex->wFormatTag == WAVE_FORMAT_DVM)
@@ -431,6 +433,8 @@ bool HDevice::SetupAudioCapture(IBaseFilter *filter, AudioConfig &config)
 	bool success;
 	HRESULT hr;
 
+	Debug(L"SetupAudioCapture...");
+
 	success = GetFilterPin(filter, MEDIATYPE_Audio, PIN_CATEGORY_CAPTURE,
 			       PINDIR_OUTPUT, &pin);
 	if (!success) {
@@ -441,6 +445,7 @@ bool HDevice::SetupAudioCapture(IBaseFilter *filter, AudioConfig &config)
 	ComQIPtr<IAMStreamConfig> pinConfig(pin);
 
 	if (config.useDefaultConfig) {
+	        Debug(L"useDefaultConfig...");
 		MediaTypePtr defaultMT;
 
 		if (pinConfig && SUCCEEDED(pinConfig->GetFormat(&defaultMT))) {
@@ -464,6 +469,7 @@ bool HDevice::SetupAudioCapture(IBaseFilter *filter, AudioConfig &config)
 	}
 
 	if (!config.useDefaultConfig) {
+	        Debug(L"GetClosestAudioMediaType...");
 		if (!GetClosestAudioMediaType(filter, config, audioMediaType)) {
 			Error(L"Could not get closest audio media type");
 			return false;
@@ -471,6 +477,7 @@ bool HDevice::SetupAudioCapture(IBaseFilter *filter, AudioConfig &config)
 	}
 
 	if (!!pinConfig) {
+		Debug(L"SetFormat...");
 		hr = pinConfig->SetFormat(audioMediaType);
 
 		if (FAILED(hr) && hr != E_NOTIMPL) {
