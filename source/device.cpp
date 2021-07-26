@@ -474,6 +474,12 @@ bool HDevice::SetupAudioCapture(IBaseFilter *filter, AudioConfig &config)
 			Error(L"Could not get closest audio media type");
 			return false;
 		}
+	} else {
+		WAVEFORMATEX *wfex =
+			reinterpret_cast<WAVEFORMATEX *>(audioMediaType->pbFormat);
+		// set the desired sampleRate
+		wfex->nSamplesPerSec = config.sampleRate;
+		Debug(L"\tsetup disired value sampleRate = %d", config.sampleRate);
 	}
 
 	if (!!pinConfig) {
