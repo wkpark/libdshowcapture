@@ -768,7 +768,7 @@ bool HDevice::ConnectFilters()
 				     std::string::npos);
 
 		if (!streamEngine && audioCapture != nullptr)
-			SetAudioBuffering(10);
+			SetAudioBuffering(50);
 
 		success = ConnectPins(PIN_CATEGORY_CAPTURE, MEDIATYPE_Audio,
 				      audioFilter, filter);
