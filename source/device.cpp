@@ -476,6 +476,7 @@ bool HDevice::SetupAudioCapture(IBaseFilter *filter, AudioConfig &config)
 			// set the desired sampleRate
 			wfex->nSamplesPerSec = config.sampleRate;
 			Debug(L"\tdesired sampleRate = %d", config.sampleRate);
+			wfex->nAvgBytesPerSec = wfex->nSamplesPerSec * wfex->nBlockAlign;
 		}
 	}
 
